@@ -16,7 +16,7 @@ import java.util.List;
 import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
-import pl.krystiankaniowski.futuremind.model.SingleData;
+import pl.krystiankaniowski.futuremind.model.database.Row;
 import pl.krystiankaniowski.futuremind.rest.DataManager;
 
 public class MainActivity extends AppCompatActivity implements ListManager {
@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements ListManager {
         // dataManager.requestData();
 
         List<ViewType> data = new ArrayList<>();
-        SingleData testObject = new SingleData();
+        Row testObject = new Row();
         testObject.setTitle("title");
         testObject.setDescription("http://www.google.pl");
-        testObject.setImageUrl("http://www.google.pl");
+        testObject.setUrl("http://www.google.pl");
         data.add(testObject);
 
         adapter.swap(data);

@@ -1,6 +1,6 @@
 package pl.krystiankaniowski.futuremind.rest;
 
-import pl.krystiankaniowski.futuremind.model.DataContainer;
+import pl.krystiankaniowski.futuremind.model.rest.DataContainer;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

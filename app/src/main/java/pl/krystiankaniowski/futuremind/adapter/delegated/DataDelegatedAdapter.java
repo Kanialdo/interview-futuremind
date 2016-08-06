@@ -13,7 +13,7 @@ import pl.krystiankaniowski.futuremind.R;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewTypeDelegateAdapter;
-import pl.krystiankaniowski.futuremind.model.SingleData;
+import pl.krystiankaniowski.futuremind.model.database.Row;
 
 public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
 
@@ -44,13 +44,13 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, ViewType item) {
 
         ViewHolder viewHolder = (ViewHolder) holder;
-        SingleData data = (SingleData) item;
+        Row data = (Row) item;
 
         // TODO: async load image
 
         viewHolder.title.setText(data.getTitle());
         viewHolder.description.setText(data.getDescription());
-        viewHolder.setOnClickListener(data.getTitle(), data.getDescription());
+        viewHolder.setOnClickListener(data.getTitle(), data.getUrl());
 
     }
 

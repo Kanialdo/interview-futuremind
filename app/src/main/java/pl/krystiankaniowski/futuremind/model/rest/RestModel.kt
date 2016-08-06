@@ -1,10 +1,22 @@
-package pl.krystiankaniowski.futuremind.model
+package pl.krystiankaniowski.futuremind.model.rest
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import pl.krystiankaniowski.futuremind.adapter.view.ViewType
+import java.util.*
 
-class SingleData : ViewType {
+class DataContainer {
+
+    // =============================================================================================
+    //      VARIABLES
+    // =============================================================================================
+
+    @SerializedName("data")
+    @Expose
+    var data: List<SingleData> = ArrayList()
+
+}
+
+class SingleData {
 
     // =============================================================================================
     //      VARIABLES
@@ -33,8 +45,6 @@ class SingleData : ViewType {
     // =============================================================================================
     //      LOGIC
     // =============================================================================================
-
-    override fun getViewType(): Int = ViewType.ROW
 
     override fun toString(): String {
         return "orderId ${orderId} | title ${title} | desription {$description} | modificationDate ${modificationDate} | imageUrl ${imageUrl}"

@@ -2,8 +2,8 @@ package pl.krystiankaniowski.futuremind.rest;
 
 import android.util.Log;
 
-import pl.krystiankaniowski.futuremind.model.DataContainer;
-import pl.krystiankaniowski.futuremind.model.SingleData;
+import pl.krystiankaniowski.futuremind.model.rest.DataContainer;
+import pl.krystiankaniowski.futuremind.model.rest.SingleData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
