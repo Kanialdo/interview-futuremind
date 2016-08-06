@@ -14,6 +14,7 @@ import android.view.View;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.adapter.SimpleItemRecyclerViewAdapter;
 import pl.krystiankaniowski.futuremind.dummy.DummyContent;
+import pl.krystiankaniowski.futuremind.rest.DataManager;
 
 /**
  * An activity representing a list of Items. This activity
@@ -34,6 +35,8 @@ public class ItemListActivity extends AppCompatActivity implements ListManager {
      * device.
      */
     private boolean mTwoPane;
+
+    private DataManager dataManager = new DataManager();
 
     // =============================================================================================
     //      LIFE CYCLE
@@ -72,6 +75,9 @@ public class ItemListActivity extends AppCompatActivity implements ListManager {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        dataManager.requestData();
+
     }
 
     // =============================================================================================

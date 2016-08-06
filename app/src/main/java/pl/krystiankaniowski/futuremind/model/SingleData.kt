@@ -36,4 +36,8 @@ class SingleData : ViewType {
 
     override fun getViewType(): Int = ViewType.ROW
 
+    override fun toString(): String {
+        return "orderId ${orderId} | title ${title} | desription {$description} | modificationDate ${modificationDate} | imageUrl ${imageUrl}"
+    }
+
 }
