@@ -6,12 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
@@ -55,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
             }
         });
 
-        View recyclerView = findViewById(R.id.item_list);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -77,8 +80,14 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
     // =============================================================================================
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         adapter = new DataAdapter(this, null);
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override

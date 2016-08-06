@@ -4,8 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,16 +49,16 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
         ViewHolder viewHolder = (ViewHolder) holder;
         final Row data = (Row) item;
 
-        // TODO: async load image
-
         viewHolder.title.setText(data.getTitle());
         viewHolder.description.setText(data.getDescription());
-        viewHolder.setOnClickListener(new Runnable() {
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
                 manager.showContent(data.getTitle(), data.getUrl());
             }
         });
+
+        Picasso.with(viewHolder.avatar.getContext()).load(data.getImageUrl()).into(viewHolder.avatar);
 
     }
 
@@ -74,6 +77,9 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
         @BindView(R.id.item_record_tv_description)
         TextView description;
 
+        @BindView(R.id.item_record_b_more)
+        Button button;
+
         public ViewHolder(View view) {
             super(view);
 
@@ -82,19 +88,10 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
             // to przez nagłe dziwne problemy z butterknifem
 
             avatar = ButterKnife.findById(view, R.id.item_record_iv_avatar);
-            description = ButterKnife.findById(view, R.id.item_record_tv_title);
-            title = ButterKnife.findById(view, R.id.item_record_tv_description);
+            title = ButterKnife.findById(view, R.id.item_record_tv_title);
+            description = ButterKnife.findById(view, R.id.item_record_tv_description);
+            button = ButterKnife.findById(view, R.id.item_record_b_more);
 
-        }
-
-        public void setOnClickListener(final Runnable runnable) {
-            itemView.setClickable(true);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    runnable.run();
-                }
-            });
         }
 
     }
