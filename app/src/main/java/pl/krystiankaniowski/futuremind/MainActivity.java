@@ -10,17 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
-import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
 import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
 import pl.krystiankaniowski.futuremind.model.database.Row;
-import pl.krystiankaniowski.futuremind.rest.DataManager;
+import pl.krystiankaniowski.futuremind.rest.RestManager;
+import pl.krystiankaniowski.futuremind.rest.RestObserver;
 
-public class MainActivity extends AppCompatActivity implements ListManager {
+public class MainActivity extends AppCompatActivity implements ListManager, RestObserver {
 
     // =============================================================================================
     //      VARIABLES
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements ListManager {
 
     private boolean twoPaneLayout;
 
-    private DataManager dataManager = new DataManager();
     private DataAdapter adapter;
 
     // =============================================================================================
@@ -69,23 +67,8 @@ public class MainActivity extends AppCompatActivity implements ListManager {
             twoPaneLayout = true;
         }
 
-        // dataManager.requestData();
-
-        List<ViewType> data = new ArrayList<>();
-        Row testObject = new Row();
-        testObject.setTitle("title");
-        testObject.setDescription("http://www.google.pl");
-        testObject.setUrl("http://www.google.pl");
-        data.add(testObject);
-
-        adapter.swap(data);
-
-        List<Row> dataList = new ArrayList<>();
-        dataList.add(testObject);
-
-        DatabaseManager.getInstance(getApplicationContext()).saveData(dataList);
-        DatabaseManager.getInstance(getApplicationContext()).getData(Row.class);
         DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
+        RestManager.getInstance(getApplicationContext()).requestData(this);
 
     }
 
@@ -96,6 +79,12 @@ public class MainActivity extends AppCompatActivity implements ListManager {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         adapter = new DataAdapter(this, null);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSuccess(List<Row> data) {
+        adapter.swap(data);
+        DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
     }
 
     @Override

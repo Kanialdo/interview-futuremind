@@ -54,22 +54,6 @@ public class DatabaseManager {
     //      LOGIC
     // =============================================================================================
 
-    public <Type extends RealmObject> void clearData(Class<Type> typeClass) {
-
-        realm.beginTransaction();
-        realm.delete(typeClass);
-        realm.commitTransaction();
-
-    }
-
-    public <Type extends RealmObject> void saveData(List<Type> data) {
-
-        realm.beginTransaction();
-        realm.copyToRealm(data);
-        realm.commitTransaction();
-
-    }
-
     public <Type extends RealmObject> List<Type> getData(Class<Type> typeClass) {
 
         final RealmResults<Type> items = realm.where(typeClass).findAllSorted("orderId", Sort.ASCENDING);
@@ -81,6 +65,30 @@ public class DatabaseManager {
         }
 
         return items;
+
+    }
+
+    public <Type extends RealmObject> void saveData(List<Type> data) {
+
+        realm.beginTransaction();
+        realm.copyToRealm(data);
+        realm.commitTransaction();
+
+    }
+
+    public <Type extends RealmObject> void clearData(Class<Type> typeClass) {
+
+        realm.beginTransaction();
+        realm.delete(typeClass);
+        realm.commitTransaction();
+
+    }
+
+    public void clearAllData() {
+
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
 
     }
 

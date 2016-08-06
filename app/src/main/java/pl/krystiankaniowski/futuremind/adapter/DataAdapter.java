@@ -49,7 +49,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data != null ? data.size() : 0;
     }
 
     @Override
@@ -57,13 +57,13 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return data.get(position).getViewType();
     }
 
-    public void swap(List<ViewType> data) {
+    public <Type extends ViewType> void swap(List<Type> data) {
 
         if (this.data != null) {
             this.data.clear();
             this.data.addAll(data);
         } else {
-            this.data = new ArrayList<>(data);
+            this.data = new ArrayList<ViewType>(data);
         }
 
         notifyDataSetChanged();

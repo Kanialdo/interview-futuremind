@@ -2,6 +2,7 @@ package pl.krystiankaniowski.futuremind.model
 
 import pl.krystiankaniowski.futuremind.model.database.Row
 import pl.krystiankaniowski.futuremind.model.rest.SingleData
+import java.util.*
 
 class ModelConverter {
 
@@ -23,6 +24,18 @@ class ModelConverter {
             row.modificationDate = data.modificationDate
 
             return row
+
+        }
+
+        fun toDatabaseModel(data: List<SingleData>): List<Row> {
+
+            var list = ArrayList<Row>()
+
+            for (item in data) {
+                list.add(toDatabaseModel(item))
+            }
+
+            return list
 
         }
 
