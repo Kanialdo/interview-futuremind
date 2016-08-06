@@ -4,6 +4,7 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.krystiankaniowski.futuremind.adapter.delegated.DataDelegatedAdapter;
@@ -62,7 +63,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.data.clear();
             this.data.addAll(data);
         } else {
-            this.data = data;
+            this.data = new ArrayList<>(data);
         }
 
         notifyDataSetChanged();

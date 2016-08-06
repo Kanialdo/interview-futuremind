@@ -44,13 +44,18 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, ViewType item) {
 
         ViewHolder viewHolder = (ViewHolder) holder;
-        Row data = (Row) item;
+        final Row data = (Row) item;
 
         // TODO: async load image
 
         viewHolder.title.setText(data.getTitle());
         viewHolder.description.setText(data.getDescription());
-        viewHolder.setOnClickListener(data.getTitle(), data.getUrl());
+        viewHolder.setOnClickListener(new Runnable() {
+            @Override
+            public void run() {
+                manager.showContent(data.getTitle(), data.getUrl());
+            }
+        });
 
     }
 
@@ -58,7 +63,7 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
     //      VIEW HOLDER
     // =============================================================================================
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.item_record_iv_avatar)
         ImageView avatar;
@@ -71,15 +76,23 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
 
         public ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+
+            // ButterKnife.bind(this, view);
+
+            // to przez nagłe dziwne problemy z butterknifem
+
+            avatar = ButterKnife.findById(view, R.id.item_record_iv_avatar);
+            description = ButterKnife.findById(view, R.id.item_record_tv_title);
+            title = ButterKnife.findById(view, R.id.item_record_tv_description);
+
         }
 
-        public void setOnClickListener(final String title, final String url) {
+        public void setOnClickListener(final Runnable runnable) {
             itemView.setClickable(true);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    manager.showContent(title, url);
+                    runnable.run();
                 }
             });
         }

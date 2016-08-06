@@ -1,8 +1,9 @@
 package pl.krystiankaniowski.futuremind.model.database;
 
+import io.realm.RealmObject;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
 
-public class Row implements ViewType {
+public class Row extends RealmObject implements ViewType {
 
     // =============================================================================================
     //      VARIABLES

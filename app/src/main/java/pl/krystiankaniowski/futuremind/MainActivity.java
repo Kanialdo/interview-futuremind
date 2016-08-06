@@ -16,6 +16,7 @@ import java.util.List;
 import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
+import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
 import pl.krystiankaniowski.futuremind.model.database.Row;
 import pl.krystiankaniowski.futuremind.rest.DataManager;
 
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements ListManager {
         data.add(testObject);
 
         adapter.swap(data);
+
+        List<Row> dataList = new ArrayList<>();
+        dataList.add(testObject);
+
+        DatabaseManager.getInstance(getApplicationContext()).saveData(dataList);
+        DatabaseManager.getInstance(getApplicationContext()).getData(Row.class);
+        DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
 
     }
 
