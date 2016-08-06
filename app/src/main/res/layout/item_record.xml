@@ -66,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="@string/button_more"
+                android:textColor="@color/colorAccent"
                 />
 
         </LinearLayout>

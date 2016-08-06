@@ -5,5 +5,6 @@
     <string name="lorem_ipsum">Lorem ipsum</string>
     <string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In imperdiet mauris sit amet justo malesuada facilisis. Pellentesque hendrerit dapibus odio nec mattis. Proin vestibulum mauris non leo eleifend auctor. Sed id lobortis diam. Fusce ut orci vitae orci pulvinar scelerisque. Curabitur interdum metus eu urna molestie ultricies. Nunc convallis, nibh et venenatis fermentum, velit ante lacinia diam, a volutpat justo leo eu quam. Aliquam in magna convallis, vulputate ante a, ultricies augue. Vestibulum at urna non ligula porta placerat eu venenatis ipsum. Sed dapibus arcu at convallis auctor. Nulla nec condimentum neque. Interdum et malesuada fames ac ante ipsum primis in faucibus.</string>
     <string name="button_more">Show more</string>
+    <string name="info_data_loading">Trwa pobieranie danych</string>
 
 </resources>

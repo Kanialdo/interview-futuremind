@@ -8,6 +8,7 @@ public interface ViewType {
 
     int ROW = 1;
     int LOADING = 2;
+    int MESSAGE = 3;
 
     // =============================================================================================
     //      INTERFACE

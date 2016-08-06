@@ -85,14 +85,14 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new DataAdapter(this, null);
+        adapter = new DataAdapter(this, this, null);
         recyclerView.setAdapter(adapter);
 
     }
 
     @Override
     public void onSuccess(List<Row> data) {
-        adapter.swap(data);
+        adapter.setData(data);
         DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
     }
 
