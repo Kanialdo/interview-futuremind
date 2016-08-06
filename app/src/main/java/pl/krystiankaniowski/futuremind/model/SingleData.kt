@@ -2,8 +2,13 @@ package pl.krystiankaniowski.futuremind.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import pl.krystiankaniowski.futuremind.adapter.view.ViewType
 
-class SingleData {
+class SingleData : ViewType {
+
+    // =============================================================================================
+    //      VARIABLES
+    // =============================================================================================
 
     @SerializedName("title")
     @Expose
@@ -24,5 +29,11 @@ class SingleData {
     @SerializedName("image_url")
     @Expose
     var imageUrl: String? = null
+
+    // =============================================================================================
+    //      LOGIC
+    // =============================================================================================
+
+    override fun getViewType(): Int = ViewType.ROW
 
 }
