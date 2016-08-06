@@ -1,7 +1,6 @@
 package pl.krystiankaniowski.futuremind;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,32 +10,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
-import pl.krystiankaniowski.futuremind.adapter.SimpleItemRecyclerViewAdapter;
-import pl.krystiankaniowski.futuremind.dummy.DummyContent;
+import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
+import pl.krystiankaniowski.futuremind.model.SingleData;
 import pl.krystiankaniowski.futuremind.rest.DataManager;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
-public class ItemListActivity extends AppCompatActivity implements ListManager {
+public class MainActivity extends AppCompatActivity implements ListManager {
 
     // =============================================================================================
     //      VARIABLES
     // =============================================================================================
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+    private boolean twoPaneLayout;
 
     private DataManager dataManager = new DataManager();
+    private DataAdapter adapter;
 
     // =============================================================================================
     //      LIFE CYCLE
@@ -73,10 +65,19 @@ public class ItemListActivity extends AppCompatActivity implements ListManager {
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
             // activity should be in two-pane mode.
-            mTwoPane = true;
+            twoPaneLayout = true;
         }
 
-        dataManager.requestData();
+        // dataManager.requestData();
+
+        List<ViewType> data = new ArrayList<>();
+        SingleData testObject = new SingleData();
+        testObject.setTitle("title");
+        testObject.setDescription("http://www.google.pl");
+        testObject.setImageUrl("http://www.google.pl");
+        data.add(testObject);
+
+        adapter.swap(data);
 
     }
 
@@ -85,29 +86,17 @@ public class ItemListActivity extends AppCompatActivity implements ListManager {
     // =============================================================================================
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS));
+        adapter = new DataAdapter(this, null);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    public void showContent(String key, String value) {
+    public void showContent(String title, String url) {
 
-        if (mTwoPane) {
-
-            Bundle arguments = new Bundle();
-            arguments.putString(key, value);
-
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, fragment).commit();
-
+        if (twoPaneLayout) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(url)).commit();
         } else {
-
-            Intent intent = new Intent(this, ItemDetailActivity.class);
-            intent.putExtra(key, value);
-
-            startActivity(intent);
-
+            startActivity(DetailsActivity.newIntent(this, url));
         }
 
     }

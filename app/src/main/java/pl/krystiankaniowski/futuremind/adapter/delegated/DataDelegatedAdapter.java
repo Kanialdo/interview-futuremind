@@ -10,11 +10,26 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.krystiankaniowski.futuremind.R;
+import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewType;
 import pl.krystiankaniowski.futuremind.adapter.view.ViewTypeDelegateAdapter;
 import pl.krystiankaniowski.futuremind.model.SingleData;
 
 public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
+
+    // =============================================================================================
+    //      VARIABLES
+    // =============================================================================================
+
+    private ListManager manager;
+
+    // =============================================================================================
+    //      CONSTRUCTOR
+    // =============================================================================================
+
+    public DataDelegatedAdapter(ListManager manager) {
+        this.manager = manager;
+    }
 
     // =============================================================================================
     //      LOGIC
@@ -35,6 +50,7 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
 
         viewHolder.title.setText(data.getTitle());
         viewHolder.description.setText(data.getDescription());
+        viewHolder.setOnClickListener(data.getTitle(), data.getDescription());
 
     }
 
@@ -56,6 +72,16 @@ public class DataDelegatedAdapter implements ViewTypeDelegateAdapter {
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        public void setOnClickListener(final String title, final String url) {
+            itemView.setClickable(true);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    manager.showContent(title, url);
+                }
+            });
         }
 
     }

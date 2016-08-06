@@ -23,11 +23,11 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //      CONSTRUCTOR
     // =============================================================================================
 
-    public DataAdapter(List<ViewType> data) {
+    public DataAdapter(ListManager manager, List<ViewType> data) {
 
         this.data = data;
 
-        delegatedAdapters.put(ViewType.ROW, new DataDelegatedAdapter());
+        delegatedAdapters.put(ViewType.ROW, new DataDelegatedAdapter(manager));
 
     }
 
@@ -49,6 +49,24 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).getViewType();
+    }
+
+    public void swap(List<ViewType> data) {
+
+        if (this.data != null) {
+            this.data.clear();
+            this.data.addAll(data);
+        } else {
+            this.data = data;
+        }
+
+        notifyDataSetChanged();
+
     }
 
 }

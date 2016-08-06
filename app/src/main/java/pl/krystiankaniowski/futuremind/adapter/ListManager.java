@@ -2,6 +2,6 @@ package pl.krystiankaniowski.futuremind.adapter;
 
 public interface ListManager {
 
-    void showContent(String key, String value);
+    void showContent(String key, String url);
 
 }
