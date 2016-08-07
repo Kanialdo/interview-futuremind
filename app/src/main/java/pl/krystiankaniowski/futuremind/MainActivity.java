@@ -2,9 +2,11 @@ package pl.krystiankaniowski.futuremind;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -102,6 +104,18 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("f_webpage");
+        if (fragment != null) {
+            Log.v(TAG, "save fragment");
+            getSupportFragmentManager().putFragment(outState, "frag_1", fragment);
+        }
+
+    }
+
+    @Override
     protected void onDestroy() {
 
         RestManager.getInstance(this).unregister(this);
@@ -146,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
     public void showContent(String title, String url) {
 
         if (twoPaneLayout) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(url)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(url), "f_webpage").commit();
         } else {
             startActivity(DetailsActivity.newIntent(this, title, url));
         }

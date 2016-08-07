@@ -78,7 +78,7 @@ public class DatabaseManager {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.v(TAG, "Data seved");
+                Log.v(TAG, "Data saved");
             }
         });
 
@@ -94,7 +94,7 @@ public class DatabaseManager {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.v(TAG, "Data seved");
+                Log.v(TAG, "Data saved");
             }
         });
 
@@ -110,7 +110,7 @@ public class DatabaseManager {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.v(TAG, "Data seved");
+                Log.v(TAG, "Data saved");
             }
         });
 

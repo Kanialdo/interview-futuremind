@@ -3,6 +3,7 @@ package pl.krystiankaniowski.futuremind;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     private static final String ARGUMNET_TILTE = "title";
     private static final String ARGUMNET_URL = "url";
+
+    private Fragment innerFragment;
 
     // =============================================================================================
     //      CONSTRUCTOR
@@ -55,9 +58,18 @@ public class DetailsActivity extends AppCompatActivity {
         actionBar.setTitle(getIntent().getStringExtra(ARGUMNET_TILTE));
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(getIntent().getStringExtra(ARGUMNET_URL))).commit();
+            innerFragment = DetailsFragment.newInstance(getIntent().getStringExtra(ARGUMNET_URL));
+            getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, innerFragment).commit();
+        } else {
+            innerFragment = getSupportFragmentManager().getFragment(savedInstanceState, "frag_1");
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "frag_1", innerFragment);
     }
 
     // =============================================================================================

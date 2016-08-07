@@ -71,12 +71,26 @@ public class DetailsFragment extends Fragment {
             }
         });
 
-        Log.d(TAG, "URL :" + url);
-
-        webView.loadUrl(url);
-
         return rootView;
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Restore the fragment's state here
+            webView.restoreState(savedInstanceState);
+        } else {
+            Log.d(TAG, "URL :" + url);
+            webView.loadUrl(url);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
     }
 
 }
