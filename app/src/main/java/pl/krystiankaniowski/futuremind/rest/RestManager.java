@@ -9,7 +9,6 @@ import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
 import pl.krystiankaniowski.futuremind.model.ModelConverter;
 import pl.krystiankaniowski.futuremind.model.database.Row;
 import pl.krystiankaniowski.futuremind.model.rest.DataContainer;
-import pl.krystiankaniowski.futuremind.model.rest.SingleData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +34,8 @@ public class RestManager {
     private Context applicationContext;
 
     private final String TASK = "test35";
+
+    private boolean pendingRequest = false;
 
     // =============================================================================================
     //      CONSTRUCTOR
@@ -63,21 +64,27 @@ public class RestManager {
     //      LOGIC
     // =============================================================================================
 
-    public void requestData(final RestObserver observer) {
+    /**
+     * return boolean if request has started
+     */
+    public boolean requestData(final RestObserver observer) {
+
+        if (pendingRequest) {
+            Log.w(TAG, "Last request is still live");
+            return false;
+        }
+
+        pendingRequest = true;
 
         Call<DataContainer> call = service.getData(TASK);
-
         call.enqueue(new Callback<DataContainer>() {
 
             @Override
             public void onResponse(Call<DataContainer> call, Response<DataContainer> response) {
+                pendingRequest = false;
+
                 if (response.isSuccessful()) {
                     Log.i(TAG, "request success");
-                    response.body().getData(); // data
-                    for (SingleData data : response.body().getData()) {
-                        Log.v(TAG, "Object: " + data.toString());
-                    }
-
                     List<Row> data = ModelConverter.Companion.toDatabaseModel(response.body().getData());
                     DatabaseManager.getInstance(applicationContext).saveData(data);
                     observer.onSuccess(data);
@@ -85,15 +92,18 @@ public class RestManager {
                     Log.w(TAG, "request error, no data");
                     // error response, no access to resource?
                 }
+
             }
 
             @Override
             public void onFailure(Call<DataContainer> call, Throwable t) {
-                // something went completely south (like no internet connection)
+                pendingRequest = false;
                 Log.d("Error", t.getMessage());
             }
 
         });
+
+        return true;
 
     }
 

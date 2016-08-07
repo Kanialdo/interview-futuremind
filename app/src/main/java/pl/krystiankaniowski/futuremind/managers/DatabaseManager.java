@@ -54,9 +54,9 @@ public class DatabaseManager {
     //      LOGIC
     // =============================================================================================
 
-    public <Type extends RealmObject> List<Type> getData(Class<Type> typeClass) {
+    public <Type extends RealmObject> RealmResults<Type> getData(Class<Type> typeClass) {
 
-        final RealmResults<Type> items = realm.where(typeClass).findAllSorted("orderId", Sort.ASCENDING);
+        final RealmResults<Type> items = realm.where(typeClass).findAllSortedAsync("orderId", Sort.ASCENDING);
 
         Log.i(TAG, "Database content");
 
@@ -68,27 +68,51 @@ public class DatabaseManager {
 
     }
 
-    public <Type extends RealmObject> void saveData(List<Type> data) {
+    public <Type extends RealmObject> void saveData(final List<Type> data) {
 
-        realm.beginTransaction();
-        realm.copyToRealm(data);
-        realm.commitTransaction();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(data);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.v(TAG, "Data seved");
+            }
+        });
 
     }
 
-    public <Type extends RealmObject> void clearData(Class<Type> typeClass) {
+    public <Type extends RealmObject> void clearData(final Class<Type> typeClass) {
 
-        realm.beginTransaction();
-        realm.delete(typeClass);
-        realm.commitTransaction();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(typeClass);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.v(TAG, "Data seved");
+            }
+        });
 
     }
 
     public void clearAllData() {
 
-        realm.beginTransaction();
-        realm.deleteAll();
-        realm.commitTransaction();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.v(TAG, "Data seved");
+            }
+        });
 
     }
 

@@ -38,11 +38,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         delegatedAdapters.put(ViewType.MESSAGE, new MessageDelegateAdapter());
         delegatedAdapters.put(ViewType.LOADING, new LoadingDelegateAdapter());
 
-        if (this.data == null) {
-            this.data = new ArrayList<>();
-            this.data.add(new MessageDelegateAdapter.MessageItem(context.getString(R.string.info_data_loading)));
-            this.data.add(new LoadingDelegateAdapter.LoadingItem());
-        }
+        setLoadingState();
 
     }
 
@@ -69,6 +65,16 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         return data.get(position).getViewType();
+    }
+
+    public void setLoadingState() {
+
+        data = new ArrayList<>();
+        data.add(new MessageDelegateAdapter.MessageItem(context.getString(R.string.info_data_loading)));
+        data.add(new LoadingDelegateAdapter.LoadingItem());
+
+        notifyDataSetChanged();
+
     }
 
     public <Type extends ViewType> void setData(List<Type> data) {

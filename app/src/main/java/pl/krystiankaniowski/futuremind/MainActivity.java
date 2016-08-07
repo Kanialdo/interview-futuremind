@@ -10,11 +10,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import pl.krystiankaniowski.futuremind.adapter.DataAdapter;
 import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
@@ -25,12 +28,20 @@ import pl.krystiankaniowski.futuremind.rest.RestObserver;
 public class MainActivity extends AppCompatActivity implements ListManager, RestObserver {
 
     // =============================================================================================
+    //      FINALS
+    // =============================================================================================
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    // =============================================================================================
     //      VARIABLES
     // =============================================================================================
 
     private boolean twoPaneLayout;
 
     private DataAdapter adapter;
+
+    private RealmResults<Row> result;
 
     // =============================================================================================
     //      LIFE CYCLE
@@ -54,7 +65,12 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (RestManager.getInstance(getApplicationContext()).requestData(MainActivity.this)) {
+                    adapter.setLoadingState();
+                    DatabaseManager.getInstance(getApplicationContext()).clearAllData();
+                } else {
+                    Snackbar.make(view, "Poczekaj na zakonczenie poprzedniego zapytania", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -63,16 +79,33 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
         setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             twoPaneLayout = true;
         }
 
-        DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
-        RestManager.getInstance(getApplicationContext()).requestData(this);
+        result = DatabaseManager.getInstance(getApplicationContext()).getData(Row.class);
+        result.addChangeListener(new RealmChangeListener<RealmResults<Row>>() {
+            @Override
+            public void onChange(RealmResults<Row> data) {
+                result.removeChangeListener(this);
+                if (data.size() > 0) {
+                    Log.i(TAG, "Cached data received");
+                    result = null;
+                    adapter.setData(data);
+                } else {
+                    Log.i(TAG, "Make date request");
+                    RestManager.getInstance(getApplicationContext()).requestData(MainActivity.this);
+                }
+            }
+        });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (result != null) {
+            result.removeChangeListeners();
+        }
+        super.onDestroy();
     }
 
     // =============================================================================================
@@ -93,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
     @Override
     public void onSuccess(List<Row> data) {
         adapter.setData(data);
-        DatabaseManager.getInstance(getApplicationContext()).clearData(Row.class);
     }
 
     @Override
