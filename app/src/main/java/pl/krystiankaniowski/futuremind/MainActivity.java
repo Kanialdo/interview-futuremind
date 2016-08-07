@@ -23,9 +23,8 @@ import pl.krystiankaniowski.futuremind.adapter.ListManager;
 import pl.krystiankaniowski.futuremind.managers.DatabaseManager;
 import pl.krystiankaniowski.futuremind.model.database.Row;
 import pl.krystiankaniowski.futuremind.rest.RestManager;
-import pl.krystiankaniowski.futuremind.rest.RestObserver;
 
-public class MainActivity extends AppCompatActivity implements ListManager, RestObserver {
+public class MainActivity extends AppCompatActivity implements ListManager, RestManager.RestObserver {
 
     // =============================================================================================
     //      FINALS
@@ -65,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (RestManager.getInstance(getApplicationContext()).requestData(MainActivity.this)) {
+                if (RestManager.getInstance(MainActivity.this).requestData()) {
                     adapter.setLoadingState();
-                    DatabaseManager.getInstance(getApplicationContext()).clearAllData();
+                    DatabaseManager.getInstance(MainActivity.this).clearAllData();
                 } else {
                     Snackbar.make(view, "Poczekaj na zakonczenie poprzedniego zapytania", Snackbar.LENGTH_LONG).show();
                 }
@@ -82,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
             twoPaneLayout = true;
         }
 
-        result = DatabaseManager.getInstance(getApplicationContext()).getData(Row.class);
+        RestManager.getInstance(this).register(this);
+
+        result = DatabaseManager.getInstance(this).getData(Row.class);
         result.addChangeListener(new RealmChangeListener<RealmResults<Row>>() {
             @Override
             public void onChange(RealmResults<Row> data) {
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
                     adapter.setData(data);
                 } else {
                     Log.i(TAG, "Make date request");
-                    RestManager.getInstance(getApplicationContext()).requestData(MainActivity.this);
+                    RestManager.getInstance(MainActivity.this).requestData();
                 }
             }
         });
@@ -102,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
 
     @Override
     protected void onDestroy() {
+
+        RestManager.getInstance(this).unregister(this);
+
         if (result != null) {
             result.removeChangeListeners();
         }
@@ -124,8 +128,18 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
     }
 
     @Override
-    public void onSuccess(List<Row> data) {
+    public void onRequestSuccess(List<Row> data) {
         adapter.setData(data);
+    }
+
+    @Override
+    public void onRequestNoDataError() {
+        adapter.setError("No data to display : (");
+    }
+
+    @Override
+    public void onRequestError(Throwable t) {
+        adapter.setError("Error, no data to display :(\n\nInfo for geeks: " + t.getMessage());
     }
 
     @Override

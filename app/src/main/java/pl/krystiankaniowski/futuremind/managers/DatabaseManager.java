@@ -43,7 +43,7 @@ public class DatabaseManager {
     public static DatabaseManager getInstance(Context context) {
 
         if (instance == null) {
-            instance = new DatabaseManager(context);
+            instance = new DatabaseManager(context.getApplicationContext());
         }
 
         return instance;
