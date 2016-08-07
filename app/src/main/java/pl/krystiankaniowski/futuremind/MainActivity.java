@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ListManager, Rest
         if (twoPaneLayout) {
             getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(url)).commit();
         } else {
-            startActivity(DetailsActivity.newIntent(this, url));
+            startActivity(DetailsActivity.newIntent(this, title, url));
         }
 
     }

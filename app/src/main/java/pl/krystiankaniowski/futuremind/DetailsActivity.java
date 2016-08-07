@@ -17,15 +17,17 @@ public class DetailsActivity extends AppCompatActivity {
 
     private static final String TAG = DetailsActivity.class.getSimpleName();
 
+    private static final String ARGUMNET_TILTE = "title";
     private static final String ARGUMNET_URL = "url";
 
     // =============================================================================================
     //      CONSTRUCTOR
     // =============================================================================================
 
-    public static Intent newIntent(Context context, String url) {
+    public static Intent newIntent(Context context, String title, String url) {
 
         Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra(ARGUMNET_TILTE, title);
         intent.putExtra(ARGUMNET_URL, url);
 
         return intent;
@@ -49,6 +51,8 @@ public class DetailsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        actionBar.setTitle(getIntent().getStringExtra(ARGUMNET_TILTE));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, DetailsFragment.newInstance(getIntent().getStringExtra(ARGUMNET_URL))).commit();

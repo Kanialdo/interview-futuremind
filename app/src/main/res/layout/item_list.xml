@@ -7,8 +7,7 @@
     android:name="pl.krystiankaniowski.futuremind.ItemListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     android:background="#eeeeee"
+    android:padding="8dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".MainActivity"
-    tools:listitem="@layout/item_list_content"/>
+    tools:context=".MainActivity"/>
